@@ -11,3 +11,10 @@ body{
     padding-bottom: 15px;
     margin: 0;
 }
+
+.dropdown-menu{
+    margin: 17px;
+    background: #262a34;
+    color: white;
+    
+}
