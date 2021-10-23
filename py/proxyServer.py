@@ -2,6 +2,7 @@ import socket
 import sys
 from thread import *
 
+
 def main():
     global listen_port, buffer_size, max_conn
     try:
@@ -52,7 +53,7 @@ def conn_string(conn, data, addr):
         webserver_pos = temp.find("/")
         if webserver_pos == -1:
             webserver_pos =len(temp)
-        websever = ""
+        webserver = ""
         port = -1
         
         if port_pos == -1 or webserver_pos < port_pos:
@@ -64,7 +65,7 @@ def conn_string(conn, data, addr):
         
         
         print(webserver)
-        proxy_sever(webserver, port, conn, data, addr)
+        proxy_server(webserver, port, conn, data, addr)
     except Exception as e:
         print(e)
         
