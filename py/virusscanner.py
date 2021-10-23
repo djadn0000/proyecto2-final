@@ -4,7 +4,7 @@ import numpy as np
 import pickle
 import sklearn.ensemble as ske
 from sklearn import cross_validation, tree, linear_model
-from sklearn.feature-selection import SelectFromModel
+from sklearn.feature_selection import SelectFromModel
 from sklearn.externals import joblib
 from sklearn.naive_bayes import GaussianNB
 from sklearn.metrics import confision_matrix
