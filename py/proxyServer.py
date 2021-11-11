@@ -1,3 +1,4 @@
+import reg_list  
 import socket
 import sys
 from thread import *
@@ -6,14 +7,16 @@ from thread import *
 def main():
     global listen_port, buffer_size, max_conn
     try:
+        #preguntar por el puerto donde se esta ejecutando el servidor
         listen_port= int(raw_input("Introduzca el puerto de servicio:"))
     except KeyboardInterrupt:
         sys.exit(0)
         
     max_conn = 5
     buffer_size = 8192
-    
+    #
     try:
+        #inicializando los sockets, resive el request de los clientes y inicia un hilo para devolver el pedido
         s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         s.bind(('', listen_port))
         s.listen(max_conn)
