@@ -29,7 +29,7 @@
                         </div>
                     </li>
                 </ul>
-             </div>
+            </div>
         </div>
     </div>
 
@@ -41,8 +41,22 @@
                 <div class="row justify-content-center align-content-center text-center">
                     <div class="columna col-lg-6">
                         <img src="../imagenes/Acceso-bloqueado.jpg"></a>
+                           
                        
-                            Atención la entrada a la pagina esta denegada por politicas de la aplicación                       
+                            <script type="text/javascript" src="./require.js"> 
+
+
+                               /* var cadena = '{"lista": ["www.youporn.com"],"PagBlock":"www.youporn.com"}';
+                                var resultado = JSON.parse(cadena)
+                                console.log(resultado.lista);*/
+
+                                var fs = require('fs');
+                                
+                                var data = fs.readFileSync('/json/dicc');
+                                var blacklist = JSON.parse(data);
+                                console.log(blacklist.PagBlock);
+
+                            </script> Atención la entrada a la pagina esta denegada por politicas de la aplicación                       
                         
                     </div>
 

@@ -1,7 +1,9 @@
+from py.reg_list import FoundTheLink
 import reg_list  
 import socket
 import sys
 from thread import *
+
 
 
 def main():
@@ -32,7 +34,9 @@ def main():
         try:
             conn, addr = s.accept()
             data = conn.recv(buffer_size)
-            start_new_thread(conn_string, (conn, data, addr))
+            if FoundTheLink(addr):
+                addr = ''
+                start_new_thread(conn_string, (conn, data, addr))
         except KeyboardInterrupt:
             s.close()
             print ("\n[*] Apagando...")

@@ -6,7 +6,7 @@ def InsertToList(link):
     c = f.read()
     f.close()
     js =json.loads(c)
-    js["Black"]["lista"].append(link)
+    js["lista"].append(link)
     s = json.dumps(js, indent=4)
     w =open("js/dicc.json" , "w")
     w.write(s)
@@ -17,18 +17,18 @@ def DeleteToList(link):
     c = f.read()
     f.close()
     js =json.loads(c)
-    js["Black"]["lista"].remove(link)
+    js["lista"].remove(link)
     s = json.dumps(js, indent=4)
     w =open("js/dicc.json" , "w")
     w.write(s)
 
 def FoundTheLink(link):
     s= False
-    f= open("js/dicc.json", "r")
+    f= open("json/dicc.json", "r")
     c = f.read()
     f.close()
     js = json.loads(c)
-    l = js["Black"]["lista"]
+    l = js["lista"]
     for x in l:
         if x == link:
             s = True    
@@ -36,11 +36,11 @@ def FoundTheLink(link):
 
 def NameToWebblock(link):
     if FoundTheLink(link) :
-        f= open("js/dicc.json", "r")
+        f= open("json/dicc.json", "r")
         c = f.read()
         f.close()
         js =json.loads(c)
-        js["PagBlock"]["Name"] = link
+        js["Name"] = link
         s = json.dumps(js, indent=4)
         w =open("json/dicc.json" , "w")
         w.write(s)
@@ -51,13 +51,13 @@ def BlockedPage(link):
        return s
    return link
 
-"""if __name__ =="__main__":
+if __name__ =="__main__":
   NameToWebblock("www.youporn.com")
   f= open("json/dicc.json", "r")
   c = f.read()
   js= json.loads(c)
   #print(FoundTheLink("www.youporn.com"))
-  adrian = js["Black"]["lista"][0]
+  adrian = js["lista"][0]
   print(adrian)
   print(js)  
-  print("adrian")"""
+  print("adrian")

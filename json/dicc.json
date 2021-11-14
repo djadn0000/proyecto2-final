@@ -1,10 +1,7 @@
 {
-    "Black": {
-        "lista": [
-            "www.youporn.com"
-        ]
-    },
-    "PagBlock": {
-        "Name": "www.youporn.com"
-    }
+    "lista": [
+        "www.youporn.com"
+    ],
+    "PagBlock": "www.youporn.com",
+    "Name": "www.youporn.com"
 }
