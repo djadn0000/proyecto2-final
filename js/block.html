@@ -43,16 +43,15 @@
                         <img src="../imagenes/Acceso-bloqueado.jpg"></a>
                            
                        
-                            <script type="text/javascript"> 
+                            <script type="text/javascript" src="../json/dicc.json"> 
 
 
                                /* var cadena = '{"lista": ["www.youporn.com"],"PagBlock":"www.youporn.com"}';
                                 var resultado = JSON.parse(cadena)
                                 console.log(resultado.lista);*/
 
-                                var fs = require('fs');
-                                
-                                
+                                //var fs = require ('fs');
+               
                                 var data = fs.readFileSync('/json/dicc.json');
                                 var blacklist = JSON.parse(data);
                                 console.log(blacklist.PagBlock);
