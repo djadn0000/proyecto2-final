@@ -34,8 +34,7 @@ def main():
         try:
             conn, addr = s.accept() 
             data = conn.recv(buffer_size)
-            for x in data:
-                print (x)
+            print(data)
             start_new_thread(conn_string, (conn, data, addr))           
                 
         except KeyboardInterrupt:
@@ -48,14 +47,16 @@ def main():
 def conn_string(conn, data, addr):
     try:
         first_line = data.split("\n")[0]
+        print (first_line)
         url= first_line.split(" ")[1]
+        print (url)
         
         http_pos = url.find("://")
         if http_pos == -1:
             temp = url
         else:
             temp =url[(http_pos + 3):]
-            
+            print(temp)
         port_pos = temp.find(":")
         
         webserver_pos = temp.find("/")
