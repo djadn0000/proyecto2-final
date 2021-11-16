@@ -1,4 +1,5 @@
-import reg_list  
+from py.reg_list import FoundTheLink
+#import reg_list  
 import socket
 import sys
 from thread import *
@@ -33,6 +34,7 @@ def main():
         try:
             conn, addr = s.accept()
             data = conn.recv(buffer_size)  
+            print (addr)
             start_new_thread(conn_string, (conn, data, addr))           
                 
         except KeyboardInterrupt:
