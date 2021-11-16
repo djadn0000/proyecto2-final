@@ -1,4 +1,4 @@
-from py.reg_list import FoundTheLink
+from reg_list import FoundTheLink
 #import reg_list  
 import socket
 import sys
