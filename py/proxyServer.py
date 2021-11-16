@@ -32,9 +32,8 @@ def main():
         
     while True:
         try:
-            conn, addr = s.accept() 
-            data = conn.recv(buffer_size)
-            print(data)
+            conn, addr = s.accept()
+            data = conn.recv(buffer_size)  
             start_new_thread(conn_string, (conn, data, addr))           
                 
         except KeyboardInterrupt:
@@ -46,17 +45,17 @@ def main():
      
 def conn_string(conn, data, addr):
     try:
+        if FoundTheLink(addr):
+           addr = 'https://proyectoadrianitt.ddns.net/proyecto2-final/js/block.html' 
         first_line = data.split("\n")[0]
-        print (first_line)
         url= first_line.split(" ")[1]
-        print (url)
         
         http_pos = url.find("://")
         if http_pos == -1:
             temp = url
         else:
             temp =url[(http_pos + 3):]
-            print(temp)
+            
         port_pos = temp.find(":")
         
         webserver_pos = temp.find("/")
@@ -83,6 +82,7 @@ def proxy_server(webserver, port, conn, data, addr):
         s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         s.connect((webserver, port))
         s.send(data)
+        s.
         
         while True:
             reply = s.recv(buffer_size)
