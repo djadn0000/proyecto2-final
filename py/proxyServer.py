@@ -14,7 +14,7 @@ def main():
     except KeyboardInterrupt:
         sys.exit(0)
         
-    max_conn = 5
+    max_conn = 10
     buffer_size = 8192
     #
     try:
@@ -34,7 +34,9 @@ def main():
         try:
             conn, addr = s.accept()
             data = conn.recv(buffer_size)  
-            print (addr)
+            print (addr) 
+            req = s.recv(1024) 
+            print (req)      
             start_new_thread(conn_string, (conn, data, addr))           
                 
         except KeyboardInterrupt:
