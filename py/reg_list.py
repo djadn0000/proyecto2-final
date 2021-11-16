@@ -51,7 +51,7 @@ def BlockedPage(link):
        return s
    return link
 
-if __name__ =="__main__":
+'''if __name__ =="__main__":
   NameToWebblock("www.youporn.com")
   f= open("json/dicc.json", "r")
   c = f.read()
@@ -60,4 +60,4 @@ if __name__ =="__main__":
   adrian = js["lista"][0]
   print(adrian)
   print(js)  
-  print("adrian")
+  print("adrian")'''
