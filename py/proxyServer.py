@@ -35,7 +35,6 @@ def main():
             conn, addr = s.accept()
             data = conn.recv(buffer_size)  
             print (addr) 
-            req = s.recv(1024) 
             print (req)      
             start_new_thread(conn_string, (conn, data, addr))           
                 
