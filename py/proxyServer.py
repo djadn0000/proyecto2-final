@@ -34,7 +34,8 @@ def main():
         try:
             conn, addr = s.accept() 
             data = conn.recv(buffer_size)
-            print (data)
+            for x in data:
+                print (x)
             start_new_thread(conn_string, (conn, data, addr))           
                 
         except KeyboardInterrupt:
