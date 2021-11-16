@@ -32,9 +32,9 @@ def main():
         
     while True:
         try:
-            conn, addr = s.accept()
-            data = conn.recv(buffer_size)  
-            print (data)    
+            conn, addr = s.accept() 
+            data = conn.recv(buffer_size)
+            print (data)
             start_new_thread(conn_string, (conn, data, addr))           
                 
         except KeyboardInterrupt:
