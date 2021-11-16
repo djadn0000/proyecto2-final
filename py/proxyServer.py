@@ -15,7 +15,7 @@ def main():
         sys.exit(0)
         
     max_conn = 10
-    buffer_size = 8192
+    buffer_size =1024# 8192
     #
     try:
         #inicializando los sockets, resive el request de los clientes y inicia un hilo para devolver el pedido
