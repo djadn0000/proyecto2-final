@@ -1,4 +1,3 @@
-from reg_list import *
 from socket import *
 #import reg_list  
 import requests
