@@ -46,8 +46,7 @@ def main():
      
 def conn_string(conn, data, addr):
     try:
-        if FoundTheLink(addr):
-           addr = 'https://proyectoadrianitt.ddns.net/proyecto2-final/js/block.html' 
+        
         first_line = data.split("\n")[0]
         url= first_line.split(" ")[1]
         
