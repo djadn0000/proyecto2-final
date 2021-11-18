@@ -87,8 +87,7 @@ def proxy_server(webserver, port, conn, data, addr):
             reply = s.recv(buffer_size)
             
             if len(reply) > 0:
-                conn.send(reply)
-                
+                conn.send(reply)                
                 dar = float(len(reply))
                 dar = float(dar/1024)
                 dar = "{}.3s".format(dar)
