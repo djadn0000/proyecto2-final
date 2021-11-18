@@ -1,9 +1,9 @@
-from reg_list import FoundTheLink
+from reg_list import *
 #import reg_list  
 import requests
 import socket
 import sys
-from thread import *
+from _thread import *
 
 
 
@@ -11,7 +11,7 @@ def main():
     global listen_port, buffer_size, max_conn
     try:
         #preguntar por el puerto donde se esta ejecutando el servidor
-        listen_port= int(raw_input("Introduzca el puerto de servicio:"))
+        listen_port= int(input("Introduzca el puerto de servicio:"))
     except KeyboardInterrupt:
         sys.exit(0)
         
