@@ -83,7 +83,8 @@ def proxy_server(webserver, port, conn, data, addr):
         s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         s.connect((webserver, port))
         s.send(data)
-        
+        prueva= requests.get(s)
+        print(prueva.url)
         while True:
             reply = s.recv(buffer_size)
             
