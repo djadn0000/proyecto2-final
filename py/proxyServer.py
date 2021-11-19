@@ -1,6 +1,3 @@
-from socket import *
-#import reg_list  
-import requests
 import socket
 import sys
 from _thread import *
@@ -43,7 +40,7 @@ def main():
             sys.exit(1)
             
     s.close()
-     
+ # esta funcion em devuelve la diereccion del host    
 def conn_string(conn, data, addr):
     try:
         
@@ -54,8 +51,8 @@ def conn_string(conn, data, addr):
         if http_pos == -1:
             temp = url
         else:
-            temp =url[(http_pos + 3):]
-            
+            temp = url[(http_pos + 3):]
+
         port_pos = temp.find(":")
         
         webserver_pos = temp.find("/")
@@ -76,7 +73,8 @@ def conn_string(conn, data, addr):
         proxy_server(webserver, port, conn, data, addr)
     except Exception as e:
         print(e)
-        
+
+ #crea un socket nuevo, se connecta al web server y envia el request al cliente  
 def proxy_server(webserver, port, conn, data, addr):
     try:
         s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -87,7 +85,8 @@ def proxy_server(webserver, port, conn, data, addr):
             reply = s.recv(buffer_size)
             
             if len(reply) > 0:
-                conn.send(reply)                
+                conn.send(reply)
+
                 dar = float(len(reply))
                 dar = float(dar/1024)
                 dar = "{}.3s".format(dar)
@@ -104,5 +103,3 @@ def proxy_server(webserver, port, conn, data, addr):
         
 if __name__ == "__main__":
     main()
-        
-    
