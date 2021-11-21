@@ -8,9 +8,8 @@ def main():
     global listen_port, buffer_size, max_conn
     try:
         #preguntar por el puerto donde se esta ejecutando el servidor
-        port =raw_input("Introduzca el puerto de servicio:")
-        listen_port = 0
-       
+        port = raw_input("Introduzca el puerto de servicio:")
+        listen_port= int(port)
     except KeyboardInterrupt:
         sys.exit(0)
         
