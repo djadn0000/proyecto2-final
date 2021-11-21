@@ -1,6 +1,6 @@
 import socket
 import sys
-from _thread import *
+from thread import *
 
 
 
@@ -8,7 +8,9 @@ def main():
     global listen_port, buffer_size, max_conn
     try:
         #preguntar por el puerto donde se esta ejecutando el servidor
-        listen_port= int(input("Introduzca el puerto de servicio:"))
+        port =raw_input("Introduzca el puerto de servicio:")
+        listen_port = 0
+       
     except KeyboardInterrupt:
         sys.exit(0)
         
