@@ -41,7 +41,7 @@ def main():
             sys.exit(1)
             
     s.close()
- # esta funcion em devuelve la diereccion del host    
+# esta funcion em devuelve la diereccion del host comunica al buscador  
 def conn_string(conn, data, addr):
     try:
         
