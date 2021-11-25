@@ -1,5 +1,6 @@
 import socket
 import sys
+import requests
 from thread import *
 
 
@@ -8,8 +9,31 @@ def main():
     global listen_port, buffer_size, max_conn
     try:
         #preguntar por el puerto donde se esta ejecutando el servidor
-         
-        listen_port= 3128
+        port = "3821" 
+        listen_port= int(port)
+    except KeyboardInterrupt:
+        sys.exit(0)
+        
+    max_conn = 10
+    buffer_size =8192
+    #
+    try:
+        #inicializando los sockets, resive el request de los clientes y inicia un hilo para devolver el pedido
+        s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        s.bind(('', listen_port))
+        s.listen(max_conn)
+        print("[*] Inicializando socket... hecho.")
+        print("[*] Socket atado exitosamente...")
+        print("[*] El servidor inicio exitosamente [{}]".format(listen_port))
+    except Exception as e:
+        print(e)
+        sys.exit(2)
+        
+        
+    while True:
+        try:
+            conn, addr = s.accept()
+            data = conn.recv(buffer_size)  
             start_new_thread(conn_string, (conn, data, addr))           
                 
         except KeyboardInterrupt:
