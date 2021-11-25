@@ -1,6 +1,5 @@
 import socket
 import sys
-import requests
 from thread import *
 
 
