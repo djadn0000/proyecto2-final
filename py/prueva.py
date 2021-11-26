@@ -8,12 +8,11 @@ def main():
     global listen_port, buffer_size, max_conn
     try:
         #preguntar por el puerto donde se esta ejecutando el servidor
-        port = "3821" 
-        listen_port= int(port)
+        listen_port= 3128
     except KeyboardInterrupt:
         sys.exit(0)
         
-    max_conn = 10
+    max_conn = 100
     buffer_size =8192
     #
     try:
@@ -47,6 +46,8 @@ def conn_string(conn, data, addr):
         
         first_line = data.split("\n")[0]
         url= first_line.split(" ")[1]
+
+        print(data)
         
         http_pos = url.find("://")
         if http_pos == -1:
@@ -91,7 +92,7 @@ def proxy_server(webserver, port, conn, data, addr):
                 dar = float(len(reply))
                 dar = float(dar/1024)
                 dar = "{}.3s".format(dar)
-                print ("[*] El pedido esta hecho: {} => {} <= {}".format(addr[0], dar, webserver))
+              # print ("[*] El pedido esta hecho: {} => {} <= {}".format(addr[0], dar, webserver))
             else:
                 break
             
