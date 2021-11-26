@@ -1,5 +1,6 @@
 import socket
 import sys
+import requests
 from thread import *
 
 
@@ -46,8 +47,13 @@ def conn_string(conn, data, addr):
         
         first_line = data.split("\n")[0]
         url= first_line.split(" ")[1]
-
+        
+        print("###########################################")
         print(data)
+        r=requests.head("www.youporn.com")
+        print("###########################################")
+        print(r)
+        print("###########################################")        
         
         http_pos = url.find("://")
         if http_pos == -1:
