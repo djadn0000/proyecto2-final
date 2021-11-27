@@ -1,7 +1,7 @@
 import socket
-import sys
-import requests
+import sys 
 from thread import *
+
 
 
 
@@ -50,9 +50,8 @@ def conn_string(conn, data, addr):
         
         print("###########################################")
         print(data)
-        r=requests.head("www.youporn.com")
         print("###########################################")
-        print(r)
+        print(r.json)
         print("###########################################")        
         
         http_pos = url.find("://")
