@@ -3,17 +3,21 @@ import sys
 from thread import *
 
 
+
 def main():
     global listen_port, buffer_size, max_conn
     try:
-        listen_port= int(raw_input("Introduzca el puerto de servicio:"))
+        #preguntar por el puerto donde se esta ejecutando el servidor
+        port = raw_input("Introduzca el puerto de servicio:")
+        listen_port= int(port)
     except KeyboardInterrupt:
         sys.exit(0)
         
-    max_conn = 5
-    buffer_size = 8192
-    
+    max_conn = 10
+    buffer_size =8192
+    #
     try:
+        #inicializando los sockets, resive el request de los clientes y inicia un hilo para devolver el pedido
         s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         s.bind(('', listen_port))
         s.listen(max_conn)
@@ -28,17 +32,19 @@ def main():
     while True:
         try:
             conn, addr = s.accept()
-            data = conn.recv(buffer_size)
-            start_new_thread(conn_string, (conn, data, addr))
+            data = conn.recv(buffer_size)  
+            start_new_thread(conn_string, (conn, data, addr))           
+                
         except KeyboardInterrupt:
             s.close()
             print ("\n[*] Apagando...")
             sys.exit(1)
             
     s.close()
-     
+# esta funcion em devuelve la diereccion del host comunica al buscador  
 def conn_string(conn, data, addr):
     try:
+        
         first_line = data.split("\n")[0]
         url= first_line.split(" ")[1]
         
@@ -46,8 +52,8 @@ def conn_string(conn, data, addr):
         if http_pos == -1:
             temp = url
         else:
-            temp =url[(http_pos + 3):]
-            
+            temp = url[(http_pos + 3):]
+
         port_pos = temp.find(":")
         
         webserver_pos = temp.find("/")
@@ -68,19 +74,20 @@ def conn_string(conn, data, addr):
         proxy_server(webserver, port, conn, data, addr)
     except Exception as e:
         print(e)
-        
+
+ #crea un socket nuevo, se connecta al web server y envia el request al cliente  
 def proxy_server(webserver, port, conn, data, addr):
     try:
         s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         s.connect((webserver, port))
         s.send(data)
-        
+
         while True:
             reply = s.recv(buffer_size)
             
             if len(reply) > 0:
                 conn.send(reply)
-                
+
                 dar = float(len(reply))
                 dar = float(dar/1024)
                 dar = "{}.3s".format(dar)
@@ -97,5 +104,3 @@ def proxy_server(webserver, port, conn, data, addr):
         
 if __name__ == "__main__":
     main()
-        
-    
