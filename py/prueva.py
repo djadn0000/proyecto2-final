@@ -1,9 +1,11 @@
 import socket
 import sys 
+import ssl
 from thread import *
 
 
-
+def verofy_cb(con,cert,errun,depth,ok):
+    return True
 
 def main():
     global listen_port, buffer_size, max_conn
@@ -18,12 +20,24 @@ def main():
     #
     try:
         #inicializando los sockets, resive el request de los clientes y inicia un hilo para devolver el pedido
-        s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        ctx = ssl.create_default_context()
+        ctx = ssl.SSLContext(ssl.PROTOCOL_SSLv23)
+        ctx.verify_mode = ssl.CERT_REQUIRED
+        ctx.check_hostname = True
+        ctx.verify_mode = ssl.CERT_NONE
+        ctx.load_cert_chain("/etc/ssl/cert/ca-bunble.crt")
+
+       # context =ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER)
+       # context.load_cert_chain('/path/to/certchain.pem', '/path/to/private.key')
+        
+        s = socket.socket(socket.AF_INET, socket.SOCK_STREAM,0)
         s.bind(('', listen_port))
         s.listen(max_conn)
+
         print("[*] Inicializando socket... hecho.")
         print("[*] Socket atado exitosamente...")
         print("[*] El servidor inicio exitosamente [{}]".format(listen_port))
+   
     except Exception as e:
         print(e)
         sys.exit(2)
@@ -31,7 +45,10 @@ def main():
         
     while True:
         try:
-            conn, addr = s.accept()
+            with ctx.wrap_socket(s, server_side=True) as ss:
+                 conn, addr = ss.accept()
+                 cert = conn.getpeercert()
+                 print (cert)
             data = conn.recv(buffer_size)  
             start_new_thread(conn_string, (conn, data, addr))           
                 
@@ -41,7 +58,7 @@ def main():
             sys.exit(1)
             
     s.close()
-# esta funcion em devuelve la diereccion del host comunica al buscador  
+# esta funcion em d b evuelve la diereccion del host comunica al buscador  
 def conn_string(conn, data, addr):
     try:
         
@@ -50,9 +67,7 @@ def conn_string(conn, data, addr):
         
         print("###########################################")
         print(data)
-        print("###########################################")
-        print(r.json)
-        print("###########################################")        
+        print("###########################################")                  
         
         http_pos = url.find("://")
         if http_pos == -1:
@@ -75,8 +90,9 @@ def conn_string(conn, data, addr):
             port= int(temp[(port_pos + 1 ):][:webserver_pos - port_pos -1])
             webserver = temp[:port_pos]
         
-        
+       
         print(webserver)
+        print(port)
         proxy_server(webserver, port, conn, data, addr)
     except Exception as e:
         print(e)
@@ -84,25 +100,24 @@ def conn_string(conn, data, addr):
  #crea un socket nuevo, se connecta al web server y envia el request al cliente  
 def proxy_server(webserver, port, conn, data, addr):
     try:
-        s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        s.connect((webserver, port))
-        s.send(data)
+       
+            s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            s.connect((webserver, port))
+            s.send(data)
+            while True:
+                reply = s.recv(buffer_size)
+                
+                if len(reply) > 0:
+                    conn.send(reply)
+                    dar = float(len(reply))
+                    dar = float(dar/1024)
+                    dar = "{}.3s".format(dar)
+                    print ("[*] El pedido esta hecho: {} => {} <= {}".format(addr[0], dar, webserver))
+                else:
+                    break
+                s.close()
+                conn.close()
 
-        while True:
-            reply = s.recv(buffer_size)
-            
-            if len(reply) > 0:
-                conn.send(reply)
-
-                dar = float(len(reply))
-                dar = float(dar/1024)
-                dar = "{}.3s".format(dar)
-              # print ("[*] El pedido esta hecho: {} => {} <= {}".format(addr[0], dar, webserver))
-            else:
-                break
-            
-        s.close()
-        conn.close()
     except socket.error (value, msg):
         s.close()
         conn.close()
