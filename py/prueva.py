@@ -20,18 +20,20 @@ def main():
     #
     try:
         #inicializando los sockets, resive el request de los clientes y inicia un hilo para devolver el pedido
-        ctx = ssl.create_default_context()
-        ctx = ssl.SSLContext(ssl.PROTOCOL_SSLv23)
-        ctx.verify_mode = ssl.CERT_REQUIRED
-        ctx.check_hostname = True
-        ctx.verify_mode = ssl.CERT_NONE
-        ctx.load_cert_chain("/etc/ssl/cert/ca-bunble.crt")
-
-       # context =ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER)
-       # context.load_cert_chain('/path/to/certchain.pem', '/path/to/private.key')
+        
+        #ctx = ssl.create_default_context()
+        #ctx = ssl.SSLContext(ssl.PROTOCOL_SSLv23)
+        #ctx.verify_mode = ssl.CERT_REQUIRED
+        #ctx.check_hostname = false
+        #ctx.verify_mode = ssl.CERT_NONE
+        #ctx.load_cert_chain("/etc/ssl/cert/ca-bunble.crt")
+        
+        context= ssl.create_default_context()
+        context =ssl.SSLContext(ssl.PROTOCOL_SSLv23)
+        context.load_cert_chain('/path/to/certchain.pem', '/path/to/private.key')
         
         s = socket.socket(socket.AF_INET, socket.SOCK_STREAM,0)
-        s.bind(('', listen_port))
+        s.bind(('localhost', listen_port))
         s.listen(max_conn)
 
         print("[*] Inicializando socket... hecho.")
@@ -45,7 +47,7 @@ def main():
         
     while True:
         try:
-            with ctx.wrap_socket(s, server_side=True) as ss:
+            with context.wrap_socket(s, server_side=True) as ss:
                  conn, addr = ss.accept()
                  cert = conn.getpeercert()
                  print (cert)
