@@ -30,7 +30,9 @@ def main():
         
         context= ssl.create_default_context()
         context =ssl.SSLContext(ssl.PROTOCOL_SSLv23)
-        context.load_cert_chain('/path/to/certchain.pem', '/path/to/private.key')
+        context.verify_mode = ssl.CERT_REQUIRED
+        context.check_hostname = True
+        context.load_verify_locations ("/etc/ssl/cert/ca-bunble.crt")
         
         s = socket.socket(socket.AF_INET, socket.SOCK_STREAM,0)
         s.bind(('localhost', listen_port))
