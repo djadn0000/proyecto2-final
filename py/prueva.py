@@ -1,6 +1,5 @@
 import socket
 import sys 
-import ssl
 from thread import *
 
 
@@ -20,20 +19,7 @@ def main():
     #
     try:
         #inicializando los sockets, resive el request de los clientes y inicia un hilo para devolver el pedido
-        
-        #ctx = ssl.create_default_context()
-        #ctx = ssl.SSLContext(ssl.PROTOCOL_SSLv23)
-        #ctx.verify_mode = ssl.CERT_REQUIRED
-        #ctx.check_hostname = false
-        #ctx.verify_mode = ssl.CERT_NONE
-        #ctx.load_cert_chain("/etc/ssl/cert/ca-bunble.crt")
-        
-        context= ssl.create_default_context()
-        context =ssl.SSLContext(ssl.PROTOCOL_SSLv23)
-        context.verify_mode = ssl.CERT_REQUIRED
-        context.check_hostname = True
-        context.load_verify_locations ("/etc/ssl/cert/ca-bunble.crt")
-        
+                
         s = socket.socket(socket.AF_INET, socket.SOCK_STREAM,0)
         s.bind(('localhost', listen_port))
         s.listen(max_conn)
@@ -49,10 +35,7 @@ def main():
         
     while True:
         try:
-            with context.wrap_socket(s, server_side=True) as ss:
-                 conn, addr = ss.accept()
-                 cert = conn.getpeercert()
-                 print (cert)
+            conn, addr = s.accept()
             data = conn.recv(buffer_size)  
             start_new_thread(conn_string, (conn, data, addr))           
                 
