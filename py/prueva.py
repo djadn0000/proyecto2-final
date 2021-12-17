@@ -1,33 +1,29 @@
 import socket
-import sys 
+import sys
 from thread import *
 
 
-def verofy_cb(con,cert,errun,depth,ok):
-    return True
 
 def main():
     global listen_port, buffer_size, max_conn
     try:
         #preguntar por el puerto donde se esta ejecutando el servidor
-        listen_port= 3128
+        port = raw_input("Introduzca el puerto de servicio:")
+        listen_port= int(port)
     except KeyboardInterrupt:
         sys.exit(0)
         
-    max_conn = 100
+    max_conn = 10
     buffer_size =8192
     #
     try:
         #inicializando los sockets, resive el request de los clientes y inicia un hilo para devolver el pedido
-                
-        s = socket.socket(socket.AF_INET, socket.SOCK_STREAM,0)
-        s.bind(('localhost', listen_port))
+        s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        s.bind(('', listen_port))
         s.listen(max_conn)
-
         print("[*] Inicializando socket... hecho.")
         print("[*] Socket atado exitosamente...")
         print("[*] El servidor inicio exitosamente [{}]".format(listen_port))
-   
     except Exception as e:
         print(e)
         sys.exit(2)
@@ -45,16 +41,12 @@ def main():
             sys.exit(1)
             
     s.close()
-# esta funcion em d b evuelve la diereccion del host comunica al buscador  
+# esta funcion em devuelve la diereccion del host comunica al buscador  
 def conn_string(conn, data, addr):
     try:
         
         first_line = data.split("\n")[0]
         url= first_line.split(" ")[1]
-        
-        print("###########################################")
-        print(data)
-        print("###########################################")                  
         
         http_pos = url.find("://")
         if http_pos == -1:
@@ -77,9 +69,8 @@ def conn_string(conn, data, addr):
             port= int(temp[(port_pos + 1 ):][:webserver_pos - port_pos -1])
             webserver = temp[:port_pos]
         
-       
+        
         print(webserver)
-        print(port)
         proxy_server(webserver, port, conn, data, addr)
     except Exception as e:
         print(e)
@@ -87,24 +78,25 @@ def conn_string(conn, data, addr):
  #crea un socket nuevo, se connecta al web server y envia el request al cliente  
 def proxy_server(webserver, port, conn, data, addr):
     try:
-       
-            s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            s.connect((webserver, port))
-            s.send(data)
-            while True:
-                reply = s.recv(buffer_size)
-                
-                if len(reply) > 0:
-                    conn.send(reply)
-                    dar = float(len(reply))
-                    dar = float(dar/1024)
-                    dar = "{}.3s".format(dar)
-                    print ("[*] El pedido esta hecho: {} => {} <= {}".format(addr[0], dar, webserver))
-                else:
-                    break
-                s.close()
-                conn.close()
+        s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        s.connect((webserver, port))
+        s.send(data)
 
+        while True:
+            reply = s.recv(buffer_size)
+            
+            if len(reply) > 0:
+                conn.send(reply)
+
+                dar = float(len(reply))
+                dar = float(dar/1024)
+                dar = "{}.3s".format(dar)
+                print ("[*] El pedido esta hecho: {} => {} <= {}".format(addr[0], dar, webserver))
+            else:
+                break
+            
+        s.close()
+        conn.close()
     except socket.error (value, msg):
         s.close()
         conn.close()
