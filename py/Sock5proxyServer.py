@@ -1,6 +1,7 @@
 import socket
 import threading
 import select
+import sys
 
 
 
@@ -11,14 +12,20 @@ class Proxy:
     def __init__(self):
         self.username = "username"
         self.password = "password"
-
+   
     def handle_client(self, connection):
         # greeting header
         # read and unpack 2 bytes from a client
         version, nmethods = connection.recv(2)
 
+        print("Versio: {} , Nmethods: {}  \n\n\n".format(version,nmethods))
+
+
         # get available methods [0, 1, 2]
         methods = self.get_available_methods(nmethods, connection)
+        
+        print("methods: {}  \n".format(methods))
+
 
         # accept only USERNAME/PASSWORD auth
         if 2 not in set(methods):
@@ -35,6 +42,8 @@ class Proxy:
         # request (version=5)
         version, cmd, _, address_type = connection.recv(4)
 
+        print("Version: {} , CMD: {}, Addr_type: {}  \n".format(version,cmd,address_type))
+
         if address_type == 1:  # IPv4
             address = socket.inet_ntoa(connection.recv(4))
         elif address_type == 3:  # Domain name
@@ -42,15 +51,18 @@ class Proxy:
             address = connection.recv(domain_length)
             address = socket.gethostbyname(address)
 
+            
+
         # convert bytes to unsigned short array
         port = int.from_bytes(connection.recv(2), 'big', signed=False)
 
         try:
             if cmd == 1:  # CONNECT
                 remote = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-                remote.connect((address, port))
+                remote.connect((address, port))                
                 bind_address = remote.getsockname()
-                print("* Connected to {} {}".format(address, port))
+                print("* Conectado a {} por el puerto {}".format(address,port))
+            
             else:
                 connection.close()
 
@@ -69,6 +81,10 @@ class Proxy:
             # return connection refused error
             reply = self.generate_failed_reply(address_type, 5)
 
+    
+        print("+++++++++++++++++++++++++++++++++++++++++++++++++++++++")
+        print("****** Reply:  {}".format(reply))
+        print("+++++++++++++++++++++++++++++++++++++++++++++++++++++++")
         connection.sendall(reply)
 
         # establish data exchange
@@ -138,15 +154,22 @@ class Proxy:
         s.bind((host, port))
         s.listen()
 
-        print("* Socks5 proxy server is running on {}:{}".format(host, port))
+        print("* El  Socks5 proxy  {}:{}".format(host, port))
 
         while True:
             conn, addr = s.accept()
-            print("* new connection from {}".format(addr))
+            print("* Nueva conexiòn desde {}".format(addr))
+            print("--------------------------------------")
+            print(conn)
+            print("--------------------------------------")
             t = threading.Thread(target=self.handle_client, args=(conn,))
             t.start()
 
 
 if __name__ == "__main__":
-    proxy = Proxy()
-    proxy.run("10.0.0.60", 3128)
+    try:
+        proxy = Proxy()
+        proxy.run("10.0.0.60", 3128)
+    except KeyboardInterrupt as e:
+        print ("\n[*] Apagando...")
+        sys.exit(1)
