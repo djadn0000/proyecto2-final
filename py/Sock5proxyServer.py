@@ -2,7 +2,7 @@ import socket
 import threading
 import select
 import sys
-
+from py import dbconf
 
 
 SOCKS_VERSION = 5

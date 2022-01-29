@@ -4,9 +4,9 @@ from pymysql.cursors import Cursor
 class DataBase:
     def __init__(self) :
         self.connection = pymysql.connect(
-            host='localhost',
-            user='djadn0000',
-            password='Adrian00_@',
+            host='proyectoadrianitt.ddns.net',
+            user='jose',
+            password='j2b1l',
             db='Proyecto'
         )
         self.cursor =self.connection.cursor()

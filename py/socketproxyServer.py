@@ -1,6 +1,7 @@
 import socket
 import sys
 from thread import *
+#import dbconf
 
 
 
@@ -8,8 +9,7 @@ def main():
     global listen_port, buffer_size, max_conn
     try:
         #preguntar por el puerto donde se esta ejecutando el servidor
-        port = raw_input("Introduzca el puerto de servicio:")
-        listen_port= int(port)
+        listen_port= 3128
     except KeyboardInterrupt:
         sys.exit(0)
         
@@ -34,7 +34,10 @@ def main():
             conn, addr = s.accept()
             data = conn.recv(buffer_size)  
             start_new_thread(conn_string, (conn, data, addr))           
-                
+            '''t1= threading.Thread(target=conn_string,args=(conn,data,addr))
+            t1.start()
+            t1.join()'''
+
         except KeyboardInterrupt:
             s.close()
             print ("\n[*] Apagando...")
