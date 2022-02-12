@@ -39,9 +39,14 @@ class BlackListController extends Controller
      */
     public function store(BlacklistFormRequest $request)
     {
+        $ip = gethostbyname($request->get('url'));
+        if($ip == $request->get('url')){
+            return redirect()->back()->with('invalid', 'URL Invalida');
+        }
         $blacklist = new Blacklist();
 
         $blacklist->url = $request->get('url');
+        $blacklist->ip = $ip;
         $blacklist->date = Carbon::now();
 
         $blacklist->save();

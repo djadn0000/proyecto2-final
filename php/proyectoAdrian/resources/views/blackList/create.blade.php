@@ -31,6 +31,13 @@
                             </ul>
                         </div>
                     @endif
+                    @if (\Session::has('invalid'))
+                        <div class="alert alert-danger">
+                            <ul>
+                                <li>{!! \Session::get('invalid') !!}</li>
+                            </ul>
+                        </div>
+                    @endif
                     <div class="row">
                         <div class="col-md-8 col-lg-8 input-group mb-3">
                             <input type="text" name="url" id="url" class="form-control" placeholder="Introduzca la URL">

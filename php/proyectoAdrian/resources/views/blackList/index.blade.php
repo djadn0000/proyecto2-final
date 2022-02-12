@@ -39,6 +39,7 @@
                     <tr>
                         <th>ID</th>
                         <th>URL</th>
+                        <th>IP</th>
                         <th>Fecha</th>
                         <th>Opciones</th>
                     </tr>
@@ -61,6 +62,7 @@
                             <td>{{$black->id}}</td>
 
                             <td>{{$black->url}}</td>
+                            <td>{{$black->ip}}</td>
                             <td>{{$black->date}}</td>
 
 
