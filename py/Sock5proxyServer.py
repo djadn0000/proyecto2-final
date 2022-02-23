@@ -6,7 +6,7 @@ import dbconf
 
 
 SOCKS_VERSION = 5
-
+database= dbconf.DataBase()
 
 class Proxy:
     def __init__(self):
@@ -47,11 +47,25 @@ class Proxy:
 
         if address_type == 1:  # IPv4
             address = socket.inet_ntoa(connection.recv(4))
+            
+            
             print("-{}".format(address))
+        
         elif address_type == 3:  # Domain name
             domain_length = connection.recv(1)[0]
             address = connection.recv(domain_length)
-            print("+{}".format(address))
+           
+            p= address.decode('UTF-8')
+            print(p)
+            '''
+            if database.domainblocked(p):
+                print("*La direccion siguiente: {} no esta permitida \n\n".format(address))
+                address='proyectoadrianitt.ddns.net'.encode('UTF-8')
+                print(address)
+                '''
+
+
+
             address = socket.gethostbyname(address)
 
             

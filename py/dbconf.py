@@ -101,21 +101,24 @@ class DataBase:
 
     #existencia de dominio
     def domainblocked(self,url):
-       sql= 'SELECT COUNT(url) FROM blacklists WHERE  url = {}'.format(url)
+       sql= 'SELECT COUNT(*) FROM blacklists WHERE url = "{}"'.format(url)
 
        try:
            self.cursor.execute(sql)
            a = self.cursor.fetchone()
-
-           if a > 0 :
+           
+           print(a) 
+           bol= False
+           if a[0] > 0 :
+               bol = True
                print('hay almenos un resultado')
-               return True
+               return bol
            else :
                print('No hay resultado')
-               return False
-       
+               return 
+
        except Exception as e:  
-           print('Hubo un error en su querry')
+           print('Hubo un error en su querry \n\n {}'.format(e))
            pass       
 
 
