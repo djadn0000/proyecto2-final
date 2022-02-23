@@ -1,3 +1,4 @@
+from logging import exception
 import pymysql
 from pymysql.cursors import Cursor
 
@@ -28,8 +29,9 @@ class DataBase:
 
          
         except Exception as e:
-            raise
-  
+            print("No se pudo conectar la base de datos")
+            pass
+            
     #seleccionar roles por id
     def select_roles(self,id):
         sql = 'SELECT * from roles WHERE id = {}'.format(id)
@@ -41,7 +43,8 @@ class DataBase:
 
          
         except Exception as e:
-            raise
+            print("No se pudo encontrar el rol solicitado")
+            pass
     
     #seleccionar malware por id
     def select_malware(self,id):
@@ -53,7 +56,8 @@ class DataBase:
          return malware
          
         except Exception as e:
-            raise
+            print("No se pudo encontrar el malware solicitado")
+            pass
 
     #seleccionar blacklist por id
     def select_roles(self,id):
@@ -65,7 +69,8 @@ class DataBase:
          return blacklist
          
         except Exception as e:
-            raise
+            print("No se pudo encontrar el link solicitado/n {}".format())
+            print("************ERROR*********************")
 
     #seleccionar user_blacklist por id
     def select_user_blacklist(self,id):
@@ -79,8 +84,8 @@ class DataBase:
          return blackuser
  
         except Exception as e:
-            raise
-    
+            print("No se pudo encontrar el usuario de la lista negra solicitado")
+            
     #seleccionar migration por id
     def select_roles(self,id):
         sql = 'SELECT * from migrations WHERE id = {}'.format(id)
@@ -89,11 +94,34 @@ class DataBase:
          self.cursor.execute(sql)
          role= self.cursor.fetchone()
          return role
-
          
         except Exception as e:
-            raise
+            print("No se pudo completar su solicitud")
+            pass
 
+    #existencia de dominio
+    def domainblocked(self,url):
+       sql= 'SELECT COUNT(url) FROM blacklists WHERE  url = {}'.format(url)
+
+       try:
+           self.cursor.execute(sql)
+           a = self.cursor.fetchone()
+
+           if a > 0 :
+               print('hay almenos un resultado')
+               return True
+           else :
+               print('No hay resultado')
+               return False
+       
+       except Exception as e:  
+           print('Hubo un error en su querry')
+           pass       
+
+
+           
+
+ 
  #eliminar por id
     # eliminar usuario por id
     def delete_user(self,id):
@@ -103,7 +131,7 @@ class DataBase:
          self.cursor.execute(sql)
                   
         except Exception as e:
-            raise
+            pass
 
     # eliminar roles por id
     def delete_role(self,id):
@@ -113,7 +141,7 @@ class DataBase:
          self.cursor.execute(sql)
                   
         except Exception as e:
-            raise
+            pass
    
     # eliminar migration por id
     def delete_migration(self,id):
@@ -123,9 +151,9 @@ class DataBase:
          self.cursor.execute(sql)
                   
         except Exception as e:
-            raise
+            pass
     
-        # eliminar roles por id
+    # eliminar roles por id
     
     # eliminar malware por id
     def delete_malware(self,id):
@@ -135,7 +163,7 @@ class DataBase:
          self.cursor.execute(sql)
                   
         except Exception as e:
-            raise
+            pass
 
     # eliminar blacklist_user por id
     def delete_blacklist_user(self,id):
@@ -145,7 +173,7 @@ class DataBase:
          self.cursor.execute(sql)
                   
         except Exception as e:
-            raise
+            pass
 
     # eliminar blacklistpor id
     def delete_blacklist_user(self,id):
@@ -155,7 +183,7 @@ class DataBase:
          self.cursor.execute(sql)
                   
         except Exception as e:
-            raise
+            pass
  
  #editar por id
    #user:
@@ -166,7 +194,7 @@ class DataBase:
          self.cursor.execute(sql)
                   
         except Exception as e:
-            raise
+            pass
     
     #editar nombre del user por id:
     def  edit_nameuser(self,id,name):
@@ -175,7 +203,7 @@ class DataBase:
          self.cursor.execute(sql)
                   
         except Exception as e:
-            raise
+            pass
 
     #editar Email del user por id:
     def  edit_emailuser(self,id,email):
@@ -184,7 +212,7 @@ class DataBase:
          self.cursor.execute(sql)
                   
         except Exception as e:
-            raise
+            pass
 
     #editar pass del user por id:
     def  edit_passworduser(self,id,password):
@@ -194,7 +222,7 @@ class DataBase:
          self.cursor.execute(sql)
                   
         except Exception as e:
-            raise
+            pass
    
    #roles:
     #editar todo roles por id
@@ -204,7 +232,7 @@ class DataBase:
             try:
                 self.cursor.execute(sql)                  
             except Exception as e:
-                raise
+                pass
 
     #editar nombre del roles por id
         def  edit_namerole(self,id,name):
@@ -213,7 +241,7 @@ class DataBase:
             try:
                 self.cursor.execute(sql)                  
             except Exception as e:
-                raise
+                pass
 
     #editar todo roles por id
         def  edit_descriptionrole(self,id,name,description):
@@ -222,10 +250,10 @@ class DataBase:
             try:
                 self.cursor.execute(sql)                  
             except Exception as e:
-                raise
+                pass
     
 database =  DataBase()
-papa = database.select_user(3)
+papa = database.domainblocked('www.pornhub.com')
 
 
 
