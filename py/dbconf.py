@@ -60,7 +60,7 @@ class DataBase:
             pass
 
     #seleccionar blacklist por id
-    def select_roles(self,id):
+    def select_blacklist_by_id(self,id):
         sql = 'SELECT * from blacklists WHERE id = {}'.format(id)
        
         try:
@@ -69,7 +69,20 @@ class DataBase:
          return blacklist
          
         except Exception as e:
-            print("No se pudo encontrar el link solicitado/n {}".format())
+            print("No se pudo encontrar el link solicitado/n {}".format(str(e)))
+            print("************ERROR*********************")
+
+    #seleccionar toda la blacklist 
+    def select_all_blacklist(self):
+        sql = 'SELECT url from blacklists'
+       
+        try:
+         self.cursor.execute(sql)
+         blacklist = self.cursor.fetchall()
+         return blacklist
+         
+        except Exception as e:
+            print("No se pudo encontrar el link solicitado/n {}".format(str(e)))
             print("************ERROR*********************")
 
     #seleccionar user_blacklist por id
@@ -87,7 +100,7 @@ class DataBase:
             print("No se pudo encontrar el usuario de la lista negra solicitado")
             
     #seleccionar migration por id
-    def select_roles(self,id):
+    def select_migration_by_id(self,id):
         sql = 'SELECT * from migrations WHERE id = {}'.format(id)
        
         try:
@@ -122,10 +135,8 @@ class DataBase:
            pass       
 
 
-           
-
- 
- #eliminar por id
+    
+#eliminar por id
     # eliminar usuario por id
     def delete_user(self,id):
         sql = 'DELETE FROM users WHERE id = {}'.format(id)
@@ -254,9 +265,7 @@ class DataBase:
                 self.cursor.execute(sql)                  
             except Exception as e:
                 pass
-    
-database =  DataBase()
-papa = database.domainblocked('www.pornhub.com')
+
 
 
 

@@ -52,11 +52,13 @@ class Proxy:
             print("-{}".format(address))
         
         elif address_type == 3:  # Domain name
+
             domain_length = connection.recv(1)[0]
             address = connection.recv(domain_length)
            
             p= address.decode('UTF-8')
             print(p)
+
             '''
             if database.domainblocked(p):
                 print("*La direccion siguiente: {} no esta permitida \n\n".format(address))
@@ -72,6 +74,7 @@ class Proxy:
 
         # convert bytes to unsigned short array
         port = int.from_bytes(connection.recv(2), 'big', signed=False)
+        print("*Port number: {}".format(port))
 
         try:
             if cmd == 1:  # CONNECT
