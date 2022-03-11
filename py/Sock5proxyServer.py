@@ -2,11 +2,13 @@ import socket
 import threading
 import select
 import sys
+from zipfile import ZIP_BZIP2
 import dbconf
-
+import block_host
 
 SOCKS_VERSION = 5
 database= dbconf.DataBase()
+block= block_host.block_host()
 
 class Proxy:
     def __init__(self):
@@ -47,8 +49,18 @@ class Proxy:
 
         if address_type == 1:  # IPv4
             address = socket.inet_ntoa(connection.recv(4))
+            p=address
+             
+
             
-            
+            if database.ipdomainblocked(p):
+                block.BlockListStatus(address_type)
+                '''
+                print("*La direccion siguiente: {} no esta permitida \n\n".format(p))
+                address='proyectoadrianitt.ddns.net'.encode('UTF-8')
+                '''
+                print(address)
+                
             print("-{}".format(address))
         
         elif address_type == 3:  # Domain name
@@ -59,13 +71,16 @@ class Proxy:
             p= address.decode('UTF-8')
             print(p)
 
-            '''
+            
             if database.domainblocked(p):
-                print("*La direccion siguiente: {} no esta permitida \n\n".format(address))
-                address='proyectoadrianitt.ddns.net'.encode('UTF-8')
-                print(address)
+                block.BlockListStatus(address_type)
+                
                 '''
-
+                print("*La direccion siguiente: {} no esta permitida \n\n".format(p))
+                address='proyectoadrianitt.ddns.net'.encode('UTF-8')
+                '''
+                print(address)
+                
 
 
             address = socket.gethostbyname(address)
@@ -103,7 +118,7 @@ class Proxy:
 
     
         #-print("+++++++++++++++++++++++++++++++++++++++++++++++++++++++")
-        print("****** Reply:  {}".format(reply))
+        #print("****** Reply:  {}".format(reply))
         #-print("+++++++++++++++++++++++++++++++++++++++++++++++++++++++")
         connection.sendall(reply)
 

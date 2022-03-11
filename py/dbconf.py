@@ -85,6 +85,20 @@ class DataBase:
             print("No se pudo encontrar el link solicitado/n {}".format(str(e)))
             print("************ERROR*********************")
 
+    #seleccionar toda las ip de blacklist 
+    def select_allip_blacklist(self):
+        sql = 'SELECT ip from blacklists'
+       
+        try:
+         self.cursor.execute(sql)
+         blacklist = self.cursor.fetchall()
+         return blacklist
+         
+        except Exception as e:
+            print("No se pudo encontrar el link solicitado/n {}".format(str(e)))
+            print("************ERROR*********************")
+
+
     #seleccionar user_blacklist por id
     def select_user_blacklist(self,id):
         
@@ -119,12 +133,31 @@ class DataBase:
        try:
            self.cursor.execute(sql)
            a = self.cursor.fetchone()
-           
-           print(a) 
+            
            bol= False
            if a[0] > 0 :
                bol = True
-               print('hay almenos un resultado')
+               print('hay almenos un resultado\n')
+               return bol
+           else :
+               print('No hay resultado')
+               return 
+
+       except Exception as e:  
+           print('Hubo un error en su querry \n\n {}'.format(e))
+           pass       
+
+    def ipdomainblocked(self,ip):
+       sql= 'SELECT COUNT(*) FROM blacklists WHERE ip = "{}"'.format(ip)
+
+       try:
+           self.cursor.execute(sql)
+           a = self.cursor.fetchone()
+            
+           bol= False
+           if a[0] > 0 :
+               bol = True
+               print('hay almenos un resultado\n')
                return bol
            else :
                print('No hay resultado')
@@ -265,10 +298,7 @@ class DataBase:
                 self.cursor.execute(sql)                  
             except Exception as e:
                 pass
-
-
-
-
-
-
-
+'''
+pepe= DataBase()
+p= pepe.select_user(1)
+'''
