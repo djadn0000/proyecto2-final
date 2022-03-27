@@ -4,11 +4,11 @@ import select
 import sys
 from zipfile import ZIP_BZIP2
 import dbconf
-import block_host
+
 
 SOCKS_VERSION = 5
 database= dbconf.DataBase()
-block= block_host.block_host()
+
 
 class Proxy:
     def __init__(self):

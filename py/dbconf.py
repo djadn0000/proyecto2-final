@@ -1,4 +1,5 @@
 from logging import exception
+import bcrypt
 import pymysql
 from pymysql.cursors import Cursor
 
@@ -24,12 +25,17 @@ class DataBase:
          print ('Name:{}'.format(user[1])) 
          print ('Email:{}'.format(user[2]))
          print ('Pass:{}'.format(user[3]))
-
+        
+         password= "adrian0".encode('utf-8')
+         if bcrypt.checkpw(password,user[3].encode('utf-8')):
+             print ("Password correct")
+         else:
+             print ("Password incorrect")
          return user
 
          
         except Exception as e:
-            print("No se pudo conectar la base de datos")
+            print("No se pudo conectar la base de datos, {}".format(e))
             pass
             
     #seleccionar roles por id
@@ -298,7 +304,6 @@ class DataBase:
                 self.cursor.execute(sql)                  
             except Exception as e:
                 pass
-'''
+
 pepe= DataBase()
-p= pepe.select_user(1)
-'''
+p= pepe.select_user(5)
