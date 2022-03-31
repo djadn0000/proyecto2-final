@@ -4,7 +4,7 @@ import os
 import array
 import math
 import pickle
-from sklearn.externals import joblib
+import joblib
 import sys
 import argparse
 
@@ -182,7 +182,7 @@ if __name__ == '__main__':
     features = pickle.loads(open(os.path.join(
         os.path.dirname(os.path.realpath(__file__)),
         'classifier/features.pkl'),
-        'r').read()
+        'rb').read()
     )
 
     data = extract_infos(args.FILE)

@@ -1,10 +1,12 @@
 import pandas as pd
 import numpy as np
 import pickle
+from sklearn import model_selection
 import sklearn.ensemble as ske
-from sklearn import cross_validation, tree, linear_model
+from sklearn import tree, linear_model
+from sklearn.model_selection import train_test_split
 from sklearn.feature_selection import SelectFromModel
-from sklearn.externals import joblib
+import joblib
 from sklearn.naive_bayes import GaussianNB
 from sklearn.metrics import confusion_matrix
 
@@ -20,7 +22,7 @@ model = SelectFromModel(fsel, prefit=True)
 X_new = model.transform(X)
 nb_features = X_new.shape[1]
 
-X_train, X_test, y_train, y_test = cross_validation.train_test_split(X_new, y ,test_size=0.2)
+X_train, X_test, y_train, y_test = model_selection.train_test_split(X_new, y ,test_size=0.2)
 
 features = []
 
@@ -58,7 +60,7 @@ print('\nWinner algorithm is %s with a %f %% success' % (winner, results[winner]
 # Save the algorithm and the feature list for later predictions
 print('Saving algorithm and feature list in classifier directory...')
 joblib.dump(algorithms[winner], 'classifier/classifier.pkl')
-open('classifier/features.pkl', 'w').write(pickle.dumps(features))
+open('classifier/features.pkl', 'w').write(str(pickle.dumps(features)))
 print('Saved')
 
 # Identify false and true positive rates
