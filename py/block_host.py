@@ -9,6 +9,8 @@ redirection="proyectoadrianitt.ddns"
 class block_host:
     def __init__(self):
         pass
+
+    
         
     def BlockListStatus(self,address_type):
         
@@ -24,7 +26,7 @@ class block_host:
             # check if the list is not enty
             if len(blacklist) > 0:
                for nw in blacklist:
-                   default.append("proyectoadrianitt.ddns.net " + nw)
+                   default.append("localhost " + nw)
 
             #write host file   
             with open(host_path, 'w') as file:

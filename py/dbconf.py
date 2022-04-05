@@ -21,16 +21,16 @@ class DataBase:
          self.cursor.execute(sql)
          user = self.cursor.fetchone()
 
-         print ('Id:{}'.format(user[0]))
+         '''print ('Id:{}'.format(user[0]))
          print ('Name:{}'.format(user[1])) 
          print ('Email:{}'.format(user[2]))
-         print ('Pass:{}'.format(user[3]))
+         print ('Pass:{}'.format(user[3]))'''
         
-         password= "adrian0".encode('utf-8')
+         '''password= "adrian00".encode('utf-8')
          if bcrypt.checkpw(password,user[3].encode('utf-8')):
              print ("Password correct")
          else:
-             print ("Password incorrect")
+             print ("Password incorrect")'''
          return user
 
          
@@ -150,7 +150,7 @@ class DataBase:
                return 
 
        except Exception as e:  
-           print('Hubo un error en su querry \n\n {}'.format(e))
+           print('no se encontro respuesta a su querry \n\n {}'.format(e))
            pass       
 
     def ipdomainblocked(self,ip):
@@ -163,7 +163,7 @@ class DataBase:
            bol= False
            if a[0] > 0 :
                bol = True
-               print('hay almenos un resultado\n')
+               print('hay almenos un resultado en la base de datos\n')
                return bol
            else :
                print('No hay resultado')

@@ -1,20 +1,99 @@
+from pydoc import doc
 import socket
 import threading
 import select
 import sys
-from zipfile import ZIP_BZIP2
 import dbconf
+import json
+import requests
+from asyncore import write 
 
 
 SOCKS_VERSION = 5
 database= dbconf.DataBase()
+global Extendicc , host_path 
 
+host_path ="/etc/hosts"
+Extendicc = {'extention':['exe','jpg','png','dll','bat','bin','txt','doc','exec','ptt','py','mp3','mp4','application']}
 
 class Proxy:
     def __init__(self):
+
         self.username = "username"
         self.password = "password"
-   
+    
+    def FileExtencionByUrl(self,link):
+        st  = link.split('/')
+        sst = st[-1]
+        tst = sst.split('.')
+        solu = tst[-1]
+        return solu
+    
+    #file extension extractor by page headers
+    def FileExtenxion(self,link):
+        r = requests.get(link)
+        dicc=dict(r.headers)
+        print('{} \n\n'.format(dicc))
+        if  'Content-Disposition' in dicc:
+            res=  dicc["Content-Disposition"]
+            sp = res.split('.')
+            t = sp[-1].strip('"')
+        elif 'Content-Type' in dicc :
+            res=  dicc["Content-Type"]
+            sp = res.split('/')
+            t = sp[0]
+        elif  'content-disposition' in dicc:
+            res=  dicc["content-disposition"]
+            sp = res.split('.')
+            t = sp[-1].strip('"')
+        else:
+            t='no exiten'
+        return t 
+    
+    # to block page in host system
+    def BlockListStatus(self,address_type):
+        
+        if address_type==1:
+            # inicial cofiguration
+            default=["127.0.0.1	localhost","127.0.1.1	adrian-VirtualBox","# The following lines are desirable for IPv6 capable hosts","::1     ip6-localhost ip6-loopback","fe00::0 ip6-localnet","ff00::0 ip6-mcastprefix","ff02::1 ip6-allnodes","ff02::2 ip6-allrouters"]
+        
+            # add blacklist   
+            blacklist=[]
+            for r in database.select_allip_blacklist():
+                blacklist.append(r[0])
+
+            # check if the list is not enty
+            if len(blacklist) > 0:
+               for nw in blacklist:
+                   default.append("localhost " + nw)
+
+            #write host file   
+            with open(host_path, 'w') as file:
+                for df in default:
+                    file.write(df+"\n")
+            
+
+        elif address_type ==3:
+
+            # inicial cofiguration
+            default=["127.0.0.1	localhost","127.0.1.1	adrian-VirtualBox","# The following lines are desirable for IPv6 capable hosts","::1     ip6-localhost ip6-loopback","fe00::0 ip6-localnet","ff00::0 ip6-mcastprefix","ff02::1 ip6-allnodes","ff02::2 ip6-allrouters"]
+        
+            # add blacklist   
+            blacklist=[]
+            for r in database.select_all_blacklist():
+                blacklist.append(r[0])
+
+            # check if the list is not enty
+            if len(blacklist) > 0:
+                for nw in blacklist:
+                    default.append("proyectoadrianitt.ddns.net " + nw)
+
+            #write host file   
+            with open(host_path, 'w') as file:
+                for df in default:
+                    file.write(df+"\n")
+
+    
     def handle_client(self, connection):
         # greeting header
         # read and unpack 2 bytes from a client
@@ -45,20 +124,20 @@ class Proxy:
         # request (version=5)
         version, cmd, _, address_type = connection.recv(4)
 
-        #-print("Version: {} , CMD: {}, Addr_type: {}  \n".format(version,cmd,address_type))
+        print("\nVersion: {} , CMD: {}, Addr_type: {}  \n".format(version,cmd,address_type))
 
+        
+        
         if address_type == 1:  # IPv4
             address = socket.inet_ntoa(connection.recv(4))
             p=address
-             
 
             
-            if database.ipdomainblocked(p):
-                block.BlockListStatus(address_type)
-                '''
+            if database.ipdomainblocked(p):                                
+                
                 print("*La direccion siguiente: {} no esta permitida \n\n".format(p))
-                address='proyectoadrianitt.ddns.net'.encode('UTF-8')
-                '''
+                #self.BlockListStatus(address_type) 
+                address='proyectoadrianitt.ddns.net'.encode('UTF-8')                
                 print(address)
                 
             print("-{}".format(address))
@@ -67,18 +146,19 @@ class Proxy:
 
             domain_length = connection.recv(1)[0]
             address = connection.recv(domain_length)
-           
+            
+             
+
             p= address.decode('UTF-8')
             print(p)
 
             
             if database.domainblocked(p):
-                block.BlockListStatus(address_type)
-                
-                '''
+               # self.BlockListStatus(self,address_type)               
+               
                 print("*La direccion siguiente: {} no esta permitida \n\n".format(p))
                 address='proyectoadrianitt.ddns.net'.encode('UTF-8')
-                '''
+                
                 print(address)
                 
 
@@ -89,14 +169,14 @@ class Proxy:
 
         # convert bytes to unsigned short array
         port = int.from_bytes(connection.recv(2), 'big', signed=False)
-        print("*Port number: {}".format(port))
+        print("*Port number: {}\n".format(port))
 
         try:
             if cmd == 1:  # CONNECT
                 remote = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
                 remote.connect((address, port))                
                 bind_address = remote.getsockname()
-                #-print("* Conectado a {} por el puerto {}".format(address,port))
+                print("\n\n* Conectado a {} por el puerto {}".format(address,port))
             
             else:
                 connection.close()
@@ -117,9 +197,9 @@ class Proxy:
             reply = self.generate_failed_reply(address_type, 5)
 
     
-        #-print("+++++++++++++++++++++++++++++++++++++++++++++++++++++++")
-        #print("****** Reply:  {}".format(reply))
-        #-print("+++++++++++++++++++++++++++++++++++++++++++++++++++++++")
+        print("+++++++++++++++++++++++++++++++++++++++++++++++++++++++")
+        print("****** Reply:  {}".format(reply))
+        print("+++++++++++++++++++++++++++++++++++++++++++++++++++++++")
         connection.sendall(reply)
 
         # establish data exchange
