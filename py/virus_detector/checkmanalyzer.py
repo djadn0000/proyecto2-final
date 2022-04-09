@@ -4,7 +4,7 @@ import pickle
 import requests
 import sys
 import os
-from sklearn.externals import joblib
+import joblib
 
 MACHINE_TYPES = {
     "IMAGE_FILE_MACHINE_UNKNOWN": 0,

@@ -1,7 +1,7 @@
 import socket
 import sys
-import _thread
-import dbconf
+from thread import *
+#import dbconf
 
 
 

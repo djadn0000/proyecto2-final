@@ -9,7 +9,6 @@ redirection="proyectoadrianitt.ddns"
 class block_host:
     def __init__(self):
         pass
-
     
         
     def BlockListStatus(self,address_type):
